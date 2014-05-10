@@ -1,7 +1,7 @@
 Snippets
 --------
 
-To record the code snippets and markdown blogs
+To record the code snippets and markdown blogs. [project page](http://owenyang0.github.io/Snippets)
 
 ### Blogs
 > * [Gulp_新一代前端构建利器](blogs/technique/Gulp_新一代前端构建利器.md)
