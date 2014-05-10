@@ -3,6 +3,7 @@
 
 <head>
     <title>trangle demo</title>
+    <meta charset="utf-8">
     <style type="text/css">
     a {
         color: #00adef;
@@ -23,27 +24,24 @@
         position: relative;
     }
     .trangle:before {
-        background-color: #505b71;
-        border-color: #475168;
+        background: #505b71;
+        border: 1px dotted #475168;
         content:"";
-        display: block;
         position: absolute;
         height: 22px;
         left: 49%;
         top: -9px;
         width: 22px;
-        transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
     }
     </style>
 </head>
 
 <body>
     <div class="trangle">
-        <i class="fa fa-twitter"></i>
         <em>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Please follow <a href="http://www.cnblogs.com/owenyang" title="cnblogs(owen)" target="_blank">owenyang</a>.
         </em>
-    </div>
     </div>
 </body>
 
