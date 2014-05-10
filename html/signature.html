@@ -6,12 +6,13 @@
     <style type="text/css">
     .signature {
         padding: 5px 15px;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        border: 1px solid #E42121;
+        margin: 20px auto;
+        border-radius: 2px;
+        /*border: 1px solid #E42121;*/
         position: relative;
-        background-color: #f2dede;
-        color: #a94442;
+        background: #475168;
+        color: #9eb3c4;
+        font: 14px 'Open Sans', sans-serif;
     }
     .signature li {
         list-style-type: none;
@@ -21,6 +22,32 @@
     .signature .capital {
         font-size: 20px;
         line-height: 35px;
+        color: #fff;
+    }
+    a {
+        color: #00adef;
+        font-weight: 300;
+        font-style: italic;
+    }
+    a:hover {
+        color: #f37c6b;
+    }
+
+    .signature:before {
+        background-color: #475168;
+        border-color: #505b71;
+        border-image: none;
+        border-right: 1px none #505b71;
+        border-style: none;
+        content: "";
+        display: block;
+        height: 22px;
+        left: 50%;
+        position: absolute;
+        top: -10px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        width: 22px
     }
     </style>
 
@@ -33,12 +60,12 @@
         <li>作者：Owen
         </li>
         <li>出处：
-            <strong><a href="http://www.cnblogs.com/owenyang" title="cnblogs(owen)" target="_blank">http://www.cnblogs.com/owenyang</a>
-            </strong>
+            <a href="http://www.cnblogs.com/owenyang" title="cnblogs(owen)" target="_blank">http://www.cnblogs.com/owenyang</a>
+            
         </li>
         <li>本文版权归作者，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。该博客同步发在
             <a href="http://blog.csdn.net/ys_073" title="CSDN(ys_073)" target="_blank">
-                <strong>CSDN-博客</strong>
+                CSDN-博客
             </a>
         </li>
     </div>
