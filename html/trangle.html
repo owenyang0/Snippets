@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>trangle demo</title>
+    <style type="text/css">
+    a {
+        color: #00adef;
+        font-weight: 300;
+        font-style: italic;
+    }
+    a:hover {
+        color: #f37c6b;
+    }
+    .trangle {
+        width: 300px;
+        margin: 30px auto;
+        background: #505b71;
+        color: #fff;
+        padding: 20px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        position: relative;
+    }
+    .trangle:before {
+        background-color: #475168;
+        border-color: #505b71;
+        border-image: none;
+        border-right: 1px none #505b71;
+        border-style: none;
+        content:"";
+        display: block;
+        height: 22px;
+        left: 49%;
+        position: absolute;
+        top: -9px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        width: 22px
+    }
+    </style>
+</head>
+
+<body>
+    <div class="trangle">
+        <i class="fa fa-twitter"></i>
+        <em>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Please follow <a href="http://www.cnblogs.com/owenyang" title="cnblogs(owen)" target="_blank">owenyang</a>.
+        </em>
+    </div>
+    </div>
+</body>
+
+</html>
