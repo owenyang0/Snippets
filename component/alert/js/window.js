@@ -14,10 +14,27 @@ define(['jquery', 'jqueryUI'], function ($, $UI) {
       hasMask: true,
       hasCloseBtn: false
     };
+
+    this.handlers = {};
   }
 
   Window.prototype = {
+    on: function (type, handler) {
+      if (typeof this.handlers[type] === 'undefined') {
+        this.handlers[type] = [];
+      }
+      this.handlers[type].push(handler);
+    },
+    fire: function (type, data) {
+      if (this.handlers[type] instanceof Array) {
+        var handlers = this.handlers[type];
+        handlers.forEach(function (handler) {
+          handler(data);
+        });
+      }
+    },
     alert: function (cfg) {
+      var self = this;
       var _cfg = $.extend(this.cfg, cfg);
       var boundingBox = $('<div class="window_boundingbox">' +
         '<div class="window_header">' + _cfg.title + '</div>' +
@@ -45,10 +62,9 @@ define(['jquery', 'jqueryUI'], function ($, $UI) {
       boundingBox.appendTo('body');
       ok.appendTo(boundingBox);
       ok.on('click', function () {
-        _cfg.handler4Alert && _cfg.handler4Alert.call(this);
-        handler4Close: null,
         boundingBox.remove();
         mask && mask.remove();
+        self.fire('alert');
       });
 
       boundingBox.css({
@@ -63,14 +79,22 @@ define(['jquery', 'jqueryUI'], function ($, $UI) {
         var closeBtn = $('<span class="window_close">X</span>');
         closeBtn.appendTo(boundingBox);
         closeBtn.on('click', function () {
-          _cfg.handler4Close && _cfg.handler4Close.call(this);
           boundingBox.remove();
           mask && mask.remove();
+          self.fire('close');
         });
       }
 
       if (_cfg.skinClassName) {
         boundingBox.addClass(_cfg.skinClassName);
+      }
+
+      if (_cfg.handler4Alert) {
+        this.on('alert', _cfg.handler4Alert);
+      }
+
+      if (_cfg.handler4Close) {
+        this.on('close', _cfg.handler4Close);
       }
     },
     confirm: function () {
