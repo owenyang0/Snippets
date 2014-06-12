@@ -5,7 +5,7 @@ require.config({
   }
 });
 
-require(['jquery', 'Window'], function ($, w) {
+require(['jquery', 'window'], function ($, w) {
   $('#a').on('click', function () {
     new w.Window().alert({
       content: 'welcome body!',
