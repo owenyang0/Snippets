@@ -1,4 +1,4 @@
-define(['jquery', 'jqueryUI'], function ($, $UI) {
+define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
   function Window() {
     this.cfg = {
       width: 500,
@@ -14,27 +14,9 @@ define(['jquery', 'jqueryUI'], function ($, $UI) {
       hasMask: true,
       hasCloseBtn: false
     };
-
-    this.handlers = {};
   }
 
-  Window.prototype = {
-    on: function (type, handler) {
-      if (typeof this.handlers[type] === 'undefined') {
-        this.handlers[type] = [];
-      }
-      this.handlers[type].push(handler);
-      return this;
-    },
-    fire: function (type, data) {
-      if (this.handlers[type] instanceof Array) {
-        var handlers = this.handlers[type];
-        handlers.forEach(function (handler) {
-          handler(data);
-        });
-      }
-      return this;
-    },
+  Window.prototype = $.extend({}, new widget.Widget(), {
     alert: function (cfg) {
       var self = this;
       var _cfg = $.extend(this.cfg, cfg);
@@ -107,7 +89,7 @@ define(['jquery', 'jqueryUI'], function ($, $UI) {
     prompt: function () {
 
     }
-  }
+  });
 
   return {
     Window: Window
