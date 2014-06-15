@@ -7,7 +7,8 @@ require.config({
 
 require(['jquery', 'window'], function ($, w) {
   $('#a').on('click', function () {
-    new w.Window().alert({
+    var win = new w.Window();
+    win.alert({
       content: 'welcome body!',
       handler4Alert: function () {
         alert('you clicked the OK button');
@@ -20,6 +21,12 @@ require(['jquery', 'window'], function ($, w) {
       y: 50,
       hasCloseBtn: true,
       skinClassName: 'window_skin_a_obsolete'
+    }).on('alert', function() {
+      alert('the first OK button');
+    }).on('alert', function() {
+      alert('the second OK button');
+    }).on('close', function() {
+      alert('first close handler');
     });
   });
 });
