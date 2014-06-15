@@ -17,70 +17,69 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
   }
 
   Window.prototype = $.extend({}, new widget.Widget(), {
-    alert: function (cfg) {
-      var self = this;
-      var _cfg = $.extend(this.cfg, cfg);
-      var boundingBox = $('<div class="window_boundingbox">' +
-        '<div class="window_header">' + _cfg.title + '</div>' +
-        '<div class="window_body">' + _cfg.content + '</div>' +
+    renderUI: function () {
+      this.boundingbox = $('<div class="window_boundingbox">' +
+        '<div class="window_header">' + this.cfg.title + '</div>' +
+        '<div class="window_body">' + this.cfg.content + '</div>' +
         '<div class="window_footer">' +
-        '<button class="window_alert">' + _cfg.text4Alert + '</button>' + '</div>' +
+        '<button class="window_alert">' + this.cfg.text4Alert + '</button>' + '</div>' +
         '</div>');
-      var ok = boundingBox.find('button');
-      var mask = null;
-      if (_cfg.hasMask) {
-        mask = $('<div class="window_mask"></div>');
-        mask.appendTo('body');
+
+      if (this.cfg.hasMask) {
+        this._mask = $('<div class="window_mask"></div>');
+        this._mask.appendTo('body');
+      }
+      if (this.cfg.hasCloseBtn) {
+        this.boundingbox.append('<span class="window_close">X</span>');
+      }
+      this.boundingbox.appendTo('body');
+    },
+    bindUI: function () {
+      var self = this;
+      this.boundingbox.delegate('.window_alert', 'click', function () {
+        self.fire('alert');
+        self.destroy();
+      }).on('click', '.window_close', function () {
+        self.fire('close');
+        self.destroy();
+      });
+
+      if (this.cfg.handler4Alert) {
+        this.on('alert', this.cfg.handler4Alert);
       }
 
-      if (_cfg.isDraggable) {
-        if (_cfg.dragHandle) {
-          boundingBox.draggable({
-            handle: _cfg.dragHandle
+      if (this.cfg.handler4Close) {
+        this.on('close', this.cfg.handler4Close);
+      }
+    },
+    syncUI: function () {
+      this.boundingbox.css({
+        width: this.cfg.width,
+        height: this.cfg.height,
+        left: (this.cfg.x || (window.innerWidth - this.cfg.width) / 2),
+        top: (this.cfg.y || (window.innerHeight - this.cfg.height) / 2),
+      });
+
+      if (this.cfg.skinClassName) {
+        this.boundingbox.addClass(this.cfg.skinClassName);
+      }
+
+      if (this.cfg.isDraggable) {
+        if (this.cfg.dragHandle) {
+          this.boundingbox.draggable({
+            handle: this.cfg.dragHandle
           });
         } else {
-          boundingBox.draggable();
+          this.boundingbox.draggable();
         }
       }
-
-      boundingBox.appendTo('body');
-      ok.appendTo(boundingBox);
-      ok.on('click', function () {
-        boundingBox.remove();
-        mask && mask.remove();
-        self.fire('alert');
-      });
-
-      boundingBox.css({
-        width: _cfg.width,
-        height: _cfg.height,
-        left: (_cfg.x || (window.innerWidth - _cfg.width) / 2),
-        top: (_cfg.y || (window.innerHeight - _cfg.height) / 2),
-        // 'margin-left': (-_cfg.width / 2)
-      });
-
-      if (_cfg.hasCloseBtn) {
-        var closeBtn = $('<span class="window_close">X</span>');
-        closeBtn.appendTo(boundingBox);
-        closeBtn.on('click', function () {
-          boundingBox.remove();
-          mask && mask.remove();
-          self.fire('close');
-        });
-      }
-
-      if (_cfg.skinClassName) {
-        boundingBox.addClass(_cfg.skinClassName);
-      }
-
-      if (_cfg.handler4Alert) {
-        this.on('alert', _cfg.handler4Alert);
-      }
-
-      if (_cfg.handler4Close) {
-        this.on('close', _cfg.handler4Close);
-      }
-
+    },
+    destructor: function() {
+      this._mask && this._mask.remove();
+    },
+    alert: function (cfg) {
+      $.extend(this.cfg, cfg);
+      this.render();
       return this;
     },
     confirm: function () {

@@ -1,6 +1,6 @@
-define(function () {
+define(['jquery'], function ($) {
   function Widget() {
-    this.handlers = {};
+    this.boundingbox = null;
   }
 
   Widget.prototype = {
@@ -19,7 +19,23 @@ define(function () {
         });
       }
       return this;
-    }
+    },
+    render: function (container) {
+      this.renderUI();
+      this.handlers = {};
+      this.bindUI();
+      this.syncUI();
+      $(container || document.body).append(this.boundingbox);
+    },
+    destroy: function () {
+      this.destructor();
+      this.boundingbox.off();
+      this.boundingbox.remove();
+    },
+    renderUI: function () {},
+    bindUI: function () {},
+    syncUI: function () {},
+    destructor: function () {}
   }
 
   return {
