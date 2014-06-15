@@ -4,10 +4,21 @@
 	width: 500px;
 	height: 300px;
 	left: 50%;
-	margin-left: -250px;
 	top: 100px;
 	boder-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   background: #fff;
+}
+
+.window_boundingbox .window_footer {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.window_boundingbox .window_cancel {
+  margin-left: 20px;
 }
 
 .window_boundingbox .window_alert {

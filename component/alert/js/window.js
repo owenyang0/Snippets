@@ -8,8 +8,12 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
       skinClassName: null,
       handler4Alert: null,
       handler4Close: null,
+      handler4ConfirmBtn: null,
+      handler4CancelBtn: null,
       dragHandle: '.window_header',
       text4Alert: 'OK',
+      text4ConfirmBtn: 'OK',
+      text4CancelBtn: 'Cancel',
       isDraggable: true,
       hasMask: true,
       hasCloseBtn: false
@@ -18,11 +22,20 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
 
   Window.prototype = $.extend({}, new widget.Widget(), {
     renderUI: function () {
+      var footerContent = '';
+      switch (this.cfg.wintype) {
+      case 'alert':
+        footerContent = '<button class="window_alert">' + this.cfg.text4Alert + '</button>';
+        break;
+      case 'confirm':
+        footerContent = '<button class="window_confirm">' + this.cfg.text4ConfirmBtn + '</button>' +
+          '<button class="window_cancel">' + this.cfg.text4CancelBtn + '</button>';
+        break;
+      };
       this.boundingbox = $('<div class="window_boundingbox">' +
         '<div class="window_header">' + this.cfg.title + '</div>' +
         '<div class="window_body">' + this.cfg.content + '</div>' +
-        '<div class="window_footer">' +
-        '<button class="window_alert">' + this.cfg.text4Alert + '</button>' + '</div>' +
+        '<div class="window_footer">' + footerContent + '</div>' +
         '</div>');
 
       if (this.cfg.hasMask) {
@@ -42,6 +55,12 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
       }).on('click', '.window_close', function () {
         self.fire('close');
         self.destroy();
+      }).on('click', '.window_confirm', function () {
+        self.fire('confirm');
+        self.destroy();
+      }).on('click', '.window_cancel', function () {
+        self.fire('cancel');
+        self.destroy();
       });
 
       if (this.cfg.handler4Alert) {
@@ -50,6 +69,14 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
 
       if (this.cfg.handler4Close) {
         this.on('close', this.cfg.handler4Close);
+      }
+
+       if (this.cfg.handler4ConfirmBtn) {
+        this.on('confirm', this.cfg.handler4ConfirmBtn);
+      }
+
+      if (this.cfg.handler4CancelBtn) {
+        this.on('cancel', this.cfg.handler4CancelBtn);
       }
     },
     syncUI: function () {
@@ -74,16 +101,22 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
         }
       }
     },
-    destructor: function() {
+    destructor: function () {
       this._mask && this._mask.remove();
     },
     alert: function (cfg) {
-      $.extend(this.cfg, cfg);
+      $.extend(this.cfg, cfg, {
+        'wintype': 'alert'
+      });
       this.render();
       return this;
     },
-    confirm: function () {
-
+    confirm: function (cfg) {
+      $.extend(this.cfg, cfg, {
+        'wintype': 'confirm'
+      });
+      this.render();
+      return this;
     },
     prompt: function () {
 

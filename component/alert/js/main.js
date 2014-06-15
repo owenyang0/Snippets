@@ -21,12 +21,27 @@ require(['jquery', 'window'], function ($, w) {
       y: 50,
       hasCloseBtn: true,
       skinClassName: 'window_skin_a_obsolete'
-    }).on('alert', function() {
+    }).on('alert', function () {
       alert('the first OK button');
-    }).on('alert', function() {
+    }).on('alert', function () {
       alert('the second OK button');
-    }).on('close', function() {
+    }).on('close', function () {
       alert('first close handler');
+    });
+  });
+
+  $('#confirm_btn').on('click', function () {
+    var confirm = new w.Window();
+    confirm.confirm({
+      title: 'confirm dialog',
+      content: 'confirm content',
+      text4Confirm: 'Yes',
+      text4Cancel: 'No',
+      dragHandle: '.window_header'
+    }).on('confirm', function () {
+      alert('another confirm');
+    }).on('cancel', function () {
+      alert('another cancel');
     });
   });
 });
