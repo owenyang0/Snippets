@@ -16,7 +16,12 @@ define(['widget', 'jquery', 'jqueryUI'], function (widget, $, $UI) {
       text4CancelBtn: 'Cancel',
       isDraggable: true,
       hasMask: true,
-      hasCloseBtn: false
+      hasCloseBtn: false,
+      text4PromptBtn: 'sure',
+      isPromptInputPassword: false,
+      defaultValue4PromptInput: '',
+      maxlength4PromptInput: 10,
+      handler4PromptBtn: null
     };
   }
 
