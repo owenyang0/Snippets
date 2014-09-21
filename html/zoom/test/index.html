@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jquery.iviewer test</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jqueryui.js"></script>
+    <!-- <script type="text/javascript" src="jquery.mousewheel.min.js"></script> -->
+    <script type="text/javascript" src="jquery-jvectormap-1.2.2.min.js"></script>
+    <script type="text/javascript" src="../jquery.iviewer.js"></script>
+
+    <script type="text/javascript">
+    var $ = jQuery;
+    $(document).ready(function() {
+        var currentPoint = {};
+        $("#viewer2").iviewer({
+            src: "4.png",
+            zoom_base: 100,
+            zoom_max: 500,
+            zoom_min: 100,
+            onMouseMove: function(ev, point) {
+                currentPoint = point;
+            },
+            onZoom: function(ev, new_zoom) {
+                containerPoint = $(this).iviewer('imageToContainer', currentPoint.x, currentPoint.y);
+                $(this).iviewer('moveTo', containerPoint.x, containerPoint.y);
+            }
+        });
+
+        $("#chimg").click(function() {
+            iviewer.loadImage("1.png");
+            return false;
+        });
+    });
+    </script>
+    <link rel="stylesheet" href="../jquery.iviewer.css" />
+    <style>
+    .viewer {
+        width: 50%;
+        height: 500px;
+        border: 1px solid black;
+        position: relative;
+    }
+    .wrapper {
+        overflow: hidden;
+    }
+    </style>
+</head>
+
+<body>
+    <h1>JQuery.iviewer test</h1>
+    <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
+    <div class="wrapper">
+        <span> <a id="in" href="#">+</a>  <a id="out" href="#">-</a>  <a id="fit" href="#">fit</a>  <a id="orig" href="#">orig</a>  <a id="update" href="#">update</a>
+        </span>
+        <div id="viewer2" class="viewer"></div>
+        <br />
+        <p>
+            <a href="#" id="chimg">Change Image</a>
+        </p>
+
+    </div>
+
+</body>
+
+</html>
