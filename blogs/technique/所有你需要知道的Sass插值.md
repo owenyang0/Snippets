@@ -1,0 +1,105 @@
+# 所有你需要知道的Sass插值
+
+你也许会不时地写写 `Sass` 玩玩，你也会很享受它带给你各种便利。但还有一件事，你并不一定完全了解：`插值` (interpolation) - 将一个占位符，替换成一个值。好了，你们都很幸运，因为今天我将把这种问题说清楚。
+
+## 插值。啥玩意儿？
+`插值`，通常是指变量插值，或者变量替换。这不是`Sass`独有的。实际上，你可以在很多编程语言中，发现这种特性。比如 `PHP`, `Perl`, `Ruby`, `Tcl`, `Groovy`, `Unix shells`, 等等。我们经常说的是，插入一个变量，或者插入一个表达式。
+
+我们还是先来看看一个例子吧。如果你有PHP的基础，接下来应该会很容易了解。比如说，你想打印一个包含变量的字符串，最常见的方式：
+
+```PHP
+  $description = "awesome";
+  echo "Tuts+ is " . $description . "!";
+```
+这就不是插值的方式，你这是字符串的连接。这其中，连接了三个字符串：`"Tuts+ is "`，`awesome`(被 `$description`所引用) 以及 `"!"`。现在，我们就来看看使用插值而非字符串连接的方式：
+
+```PHP
+  $description = "awesome";
+  echo "Tuts+ is ${description}!";
+```
+包裹在变量两边的花括号会告诉PHP，用字符串打印出变量的值。值得注意的是：它需要在双引号里面才可以工作（大多语言都是这样）。
+
+不管怎样，这就是变量/表达式插值。是使用字符串连接，还是使用插值，这都取决于你自己。但可以说一点：插值其实就是字符串连接的语法糖而已。
+
+![Sweet](../images/pour.png "Sweet")
+
+## Sass的插值
+我们先看看在Sass中，变量替换是怎么工作。
+Sass变量的命名，就像PHP一样，都有着美元符号的前缀(`$`)。两者的对比，显得就结束了，因为谈到插值，两者的表现是不同的。有一个很好的解释是：Sass是基于`Ruby`的，它使用 `${}`进行表达式替换。
+
+在Sass中，你会这样做：
+```Sass
+  $description: "awesome";
+  @warn "Tuts+ is #{$description}!";
+```
+![Awesome](../images/awesome.png "awesome")
+
+需要注意的是，变量中的`$` 不能像PHP一样丢掉。变量被`#{}`包裹了起来。另外值得一提的是：你可以插入任何类型的变量，不仅仅是字符串。
+比如：
+```Sass
+  $answer: 42;
+  @warn "The Answer to the Ultimate Question of Life, the Universe, and Everything is #{$answer}.";
+```
+
+## 什么时候应该使用插值
+现在你应该明白什么是插值了，也知道怎么在Sass中工作的了。是时候，开始着手实际场景了。首先，我们会再次使用刚才做过的`@warn`指令，它将打印相应内容到控制台。
+
+### 字符串（Strings)
+假设你有一组叫`$colors`名的颜色映射（映射是指一个存储了一系列 key/value 组合的变量），但你已经受够了一次又一次地敲 `map-get($colors, ...)`。所以，你写了一个简单的`color()`函数，使用key去获得相应的值。
+把这些组合一下就是：
+
+```Sass
+  // _config.scss
+  $colors: (
+    "primary": tomato,
+    "secondary": hotpink
+  );
+
+  // _function.scss
+  @function color($key) {
+    @return map-get($colors, $key);
+  }
+
+  // _component.scss
+  .el {
+    background-color: color(primary);
+  }
+```
+
+一切都很好，不是吗？现在，当你敲错名称，或者去取一个不存在的key时，你想给出错误的信息。这将通过 `@warn`指令来完成。`color()`函数如下：
+
+```Sass
+  @function color($key) {
+    @if not map-has-key($colors, $key) {
+      @warn "Key not found.";
+    }
+    @return map-get($colors, $key);
+  }
+```
+还不错。如果你想知道哪个key没有找到呢？
+
+```Sass
+  @function color($key) {
+    @if not map-has-key($colors, $key) {
+      @warn "Key `#{$key}` not found.";
+    }
+    @return map-get($colors, $key);
+  }
+```
+
+嘣～～变量插值。调用 `color(awesomeness)` 时，将会抛出以下信息：
+> Key `awesomeness` not found
+
+这真的很棒，但我们却不知道上下文是什么。为使后来的方便，我们可以将映射的名称写到错误信息里面。
+```Sass
+  @function color($key) {
+    @if not map-has-key($colors, $key) {
+      @warn "Key `#{$key}` not found in $colors map.";
+    }
+    @return map-get($colors, $key);
+  }
+```
+
+在这个场景里，由于这个 `$colors` 变量没有使用插值，它将打印以下信息：
+> Key `awesomeness` not found in $colors map.
+
