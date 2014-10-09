@@ -44,7 +44,7 @@ Sass变量的命名，就像PHP一样，都有着美元符号的前缀(`$`)。�
 ## 什么时候应该使用插值
 现在你应该明白什么是插值了，也知道怎么在Sass中工作的了。是时候，开始着手实际场景了。首先，我们会再次使用刚才做过的`@warn`指令，它将打印相应内容到控制台。
 
-### 字符串（Strings)
+### 字符串 (Strings)
 假设你有一组叫`$colors`名的颜色映射（映射是指一个存储了一系列 key/value 组合的变量），但你已经受够了一次又一次地敲 `map-get($colors, ...)`。所以，你写了一个简单的`color()`函数，使用key去获得相应的值。
 把这些组合一下就是：
 
@@ -103,7 +103,7 @@ Sass变量的命名，就像PHP一样，都有着美元符号的前缀(`$`)。�
 在这个场景里，由于这个 `$colors` 变量没有使用插值，它将打印以下信息：
 > Key `awesomeness` not found in $colors map.
 
-### CSS函数
+### CSS函数 (Functions)
 到目前为止，我们已经见到了最常见的变量替换场景：打印字符串中变量的内容。这确实是一个好的示例，但我觉得应该还有更好的场景：CSS函数中的变量，比如 `calc()`。
 
 假设你想基于侧边栏的宽度设置主容器的大小。你是一个勤奋的前端开发者，已经把这个宽度存储在一个变量中，所以，你可能会这样做：
@@ -151,3 +151,92 @@ $type-of-expression: type-of(calc(100% - $sidebar-width)); // string
 这是一个你有可能遇到过的场景：`for`循环和`:nth-*()`选择器一起使用。再一次说明，你需要使用插值变量，才能最终得到想得到的结果。
 
 小结：Sass会把CSS函数认为是字符串，所以想要在最后获得它们的值，要求你转义所有同它们一起使用的变量。
+
+### CSS指令 (Directives)
+我们将视转移到另一个有趣的变量插值场景：CSS指令，比如`@support`，`@page`，最重要的还是`@media`。
+
+现在，Sass是怎样解析CSS指令，尤其是demia指令的。我已经查看过Sass的源码，当我Ruby环境有点问题的时候，我找到一些[有趣](https://github.com/sass/sass/blob/2045a314e2fcd2a5f32d358a4ba57409089e6372/lib/sass/scss/parser.rb#L455)的事情。
+
+```Ruby
+  def query_expr
+    interp = interpolation
+    return interp if interp
+    return unless tok(/\(/)
+    res = ['(']
+    ss
+    res << sass_script(:parse)
+
+    if tok(/:/)
+      res << ': '
+      ss
+      res << sass_script(:parse)
+    end
+    res << tok!(/\)/)
+    ss
+    res
+  end
+```
+
+第一行告诉Sass，如果有一个插值表达式的话，便返回`media query`。如果找到一个开括号(`(`)，便会一直往下走，解析所有的东西，反之就会抛出一个错误。我们在这里试试一个例子：
+```
+  $value: screen;
+
+  @media $value {
+    // ...
+  }
+```
+
+毫不惊讶的是，这失败了：
+> Invalid CSS after "@media ": expected media query (e.g. print, screen, print and screen), was "$value {"
+
+就像错误信息提示的那样，它期待一个media query。在这里，如果你的变量在 `@media` 字符串后面，需要使用插值才可以。比如：
+```
+  $value: screen;
+
+  @media #{$value} {
+    // ...
+  }
+```
+
+和我们之前讨论的Ruby转义规则一样，如果`@media`后面紧跟（`()`），你就不再需要插值变量了，因为Sass会求出所有在这些括号里面的值。比如：
+```
+  $value: 1336px;
+
+  @media (max-width: $value) {
+    // ...
+  }
+```
+在这个示例中，Sass将这个表达式`(max-width: $value)`转化成`(max-width: 1337px)`，最后生成合法的CSS结果。所以，我们便没有必要再对变量转义了。
+
+
+### 选择器 (Selectors)
+好的，这将是最后一个示例：使用变量作为一个选择器，或者选择器的一部分。这不是一种常用的用法，以下的做法不太符合常识：
+```
+  $value: custom;
+
+  selector-$value {
+    property: value;
+  }
+```
+不幸的是，这根本无法编译成功：
+> Invalid CSS after "selector-": expected "{", was "$value {"
+
+这是`media query`那个例子的原因，差不多。Sass有着自己的方式解析一个CSS选择器。如果它遇到了不可预知的东西，比如一个未经处理的美元符号，它就会直接崩溃。
+
+幸运的，解决这个问题也相当简单（你也已经知道怎么做了）：没错，使用插值变量！
+```
+  $value: custom;
+
+  selector-#{$value} {
+    property: value;
+  }
+```
+
+## 结语
+在最后，Sass的插值没有看起来那么简单。在一些示例之中，你必须转义你的变量，一些示例中，你却不必。如果是那样，你有两种方式处理：
+> * 要么你便等着错误信息，然后转义
+> * 要么你转义除了常规CSS值（你清楚地知道，它会工作得很好）外的所有地方
+
+不管怎样，我希望你明白了插值变量是如何工作的。如果你有什么需要添加的，请在留言中指出。
+
+原文：[All You Ever Need to Know About Sass Interpolation](http://webdesign.tutsplus.com/tutorials/all-you-ever-need-to-know-about-sass-interpolation--cms-21375)
