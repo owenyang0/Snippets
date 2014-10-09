@@ -103,3 +103,51 @@ Sass变量的命名，就像PHP一样，都有着美元符号的前缀(`$`)。�
 在这个场景里，由于这个 `$colors` 变量没有使用插值，它将打印以下信息：
 > Key `awesomeness` not found in $colors map.
 
+### CSS函数
+到目前为止，我们已经见到了最常见的变量替换场景：打印字符串中变量的内容。这确实是一个好的示例，但我觉得应该还有更好的场景：CSS函数中的变量，比如 `calc()`。
+
+假设你想基于侧边栏的宽度设置主容器的大小。你是一个勤奋的前端开发者，已经把这个宽度存储在一个变量中，所以，你可能会这样做：
+```
+  $sidebar-width: 250px;
+
+  .main {
+    width: calc(100% - $sidebar-width);
+  }
+```
+然后，你会惊讶地发现，根本不work。没有报错，容器的大小却又不正确。如果你去审查你的dom元素，你会看到这个 — 被划掉了。因为，这是不合法的。
+```
+  .main {
+    width: calc(100% - $sidebar-width);
+  }
+```
+
+现在我们应该想到：`calc()` 是一个CSS函数，不是一个Sass函数。这就是说Sass会将整个表达式解释成一个字符串。你可以试试：
+```
+$type-of-expression: type-of(calc(100% - $sidebar-width)); // string
+```
+因为这是一个字符串，难怪Sass表现和之前`@warn`中的`$colors`字符串一样。`$sidebar-width`被认为是一个常规字符串，所以打出来就是它自己。但这都不是我们所想要的，是吧？我们用插值这样做。
+```
+  .main {
+    width: calc(100% - #{$sidebar-width});
+  }
+```
+现在当Sass编译这个样式文件时，它会用`#{$sidebar-width}`的值，250px替换`#{$sidebar-width}`。最后，便是合法的CSS表达式。
+```
+  .main {
+    width: calc(100% - 250px);
+  }
+```
+任务完成！我们仅仅在这里谈了`calc()`，但其实和其他CSS 原生函数是一样的，包括伪类。比如：`url()`，`linear-gradient()`，`radial-gradient()`，`cubic-bezier()`。
+
+以下是另一个使用CSS函数的例子：
+```
+  @for $i from 1 through $max {
+    .el:nth-of-type(#{$i}) {
+      // ...
+    }
+  }
+```
+
+这是一个你有可能遇到过的场景：`for`循环和`:nth-*()`选择器一起使用。再一次说明，你需要使用插值变量，才能最终得到想得到的结果。
+
+小结：Sass会把CSS函数认为是字符串，所以想要在最后获得它们的值，要求你转义所有同它们一起使用的变量。
