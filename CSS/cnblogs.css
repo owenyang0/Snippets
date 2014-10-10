@@ -1,0 +1,47 @@
+.signature {
+  padding: 5px 15px;
+  margin: 20px auto;
+  border-radius: 2px;
+  /*border: 1px solid #E42121;*/
+
+  position: relative;
+  background: #475168;
+  color: #9eb3c4;
+  font: 14px'Open Sans', sans-serif;
+}
+.signature li {
+  list-style-type: none;
+  line-height: 25px;
+  margin-bottom: 0;
+}
+.signature .capital {
+  font-size: 20px;
+  line-height: 35px;
+  color: #fff;
+}
+a {
+  color: #00adef;
+  font-weight: 300;
+  font-style: italic;
+}
+a:hover {
+  color: #f37c6b;
+}
+.post {
+  padding: 0 25px;
+}
+div.post div.entry {
+  word-break: break-word;
+}
+#cnblogs_post_body h2 {
+  background-color: #47505f;
+  color: #fff;
+  padding: 10px;
+  /*text-transform: uppercase;*/
+  line-height: 21px;
+}
+#cnblogs_post_body h3 {
+  background-color: gray;
+  color: #fff;
+  padding: 2px 10px;
+}
