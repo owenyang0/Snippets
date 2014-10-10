@@ -45,3 +45,10 @@ div.post div.entry {
   color: #fff;
   padding: 2px 10px;
 }
+#site_nav_under,
+#ad_under_post_holder,
+#under_post_news,
+#google_ad_c2,
+#under_post_kb {
+  display: none;
+}
