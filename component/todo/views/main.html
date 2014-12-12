@@ -1,0 +1,30 @@
+<div class="header">
+  <h3 class="text-muted">Todos</h3>
+</div>
+
+<div class="jumbotron">
+  <section id="todoapp">
+    <header id="header">
+      <h1>todos</h1>
+      <form id="todo-form" ng-submit="addTodo()">
+        <input id="new-todo" placeholder="Type what you want to do?" ng-model="newTodo" autofocus>
+      </form>
+    </header>
+    <section id="main" ng-show="todos.length" ng-cloak>    
+      <ul id="todo-list">
+        <li ng-repeat="todo in todos" ng-class="{completed: todo.completed}">
+          <div class="view">
+            <input class="toggle" id={{"completed_"+$index}} name="completed" type="checkbox" ng-model="todo.completed">
+            <label class="label" for={{"completed_"+$index}} ng-class="{'label-info0':!todo.completed, 'label-primary0':todo.completed}">{{todo.title}}</label>
+            <!-- <label>{{todo.title}}</label> -->
+            <button class="btn btn-danger" ng-click="removeTodo(todo)">X</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </section>
+</div>
+
+<div class="footer">
+  <p>♥ from Owen Yang 2014-3-10</p>
+</div>
