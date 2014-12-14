@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>table-cell & Position: relative</title>
+  <style type="text/css">
+  body {
+    width: 500px;
+    margin: 50px auto;
+  }
+  .table {
+    border: 1px solid #ccc;
+    display: table;
+  }
+  .cell {
+    padding: 10px;
+    border: 1px solid #ccc;
+    display: table-cell;
+    vertical-align: top;
+  }
+  .cell-icon:before {
+    content: "icon";
+  }
+  .cell-icon {
+    position: relative;
+    top: 20px;
+  }
+  </style>
+</head>
+
+<body>
+  <h3>all browsers except Firefox work fine</h3>
+  <div class="table">
+    <span class="cell">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+    <div class="cell cell-icon">
+    </div>
+  </div>
+  <br />
+  <h3>all browsers work fine</h3>
+  <div class="table">
+    <span class="cell">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+    <div class="cell">
+      <i class="cell-icon"></i>
+    </div>
+  </div>
+</body>
+
+</html>
