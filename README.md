@@ -10,6 +10,7 @@ All the blogs are in my blog posts [http://owenyang0.github.io/](http://owenyang
 > * [JavaScript TDD with Mocha](blogs/technique/JavaScript%20TDD%20with%20Mocha.md) | 2014-4-30
 > * [All You Ever Need to Know About Sass Interpolation](blogs/technique/你需要知道的Sass插值.md) | 2014-10-10
 > * [Flow: Static type checker for JavaScript](blogs/technique/Flow_Static%20type%20checker%20for%20JavaScript.md) | 2014-11-28
+> * [AEM - Adobe CMS 扒坑记之始](blogs/technique/AEM%20-%20Adobe%20CMS%20扒坑记之始.MD) | 2014-12-13
 > * [UBUNTU上的GIT SERVER](blogs/technique/Ubuntu上的Git%20Server.md) | 2014-12-24
 
 ### Components
