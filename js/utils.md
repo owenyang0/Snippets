@@ -17,7 +17,7 @@ function uniq(arr) {
 
 * foo的值是什么？
 ```javascript
-var foo = 10 + '20'; // 1020
+var foo = 10 + '20' // 1020
 ```
 
 * 如何实现以下函数？
@@ -52,9 +52,9 @@ console.log(calc(2)(5))
 * foo.x的值是什么?
 
 ```javascript
-var foo = {n: 1};
-var bar = foo;
-foo.x = foo = {n: 2};
+var foo = {n: 1}
+var bar = foo
+foo.x = foo = {n: 2}
 
 foo //  {n: 2}
 bar // {n: 1, x: {n: 2}
@@ -63,10 +63,19 @@ bar // {n: 1, x: {n: 2}
 * 继承
 ```javascript
 function extend(Child, Parent) {
-  var F = function(){};
-  F.prototype = Parent.prototype;
-  Child.prototype = new F();
-  Child.prototype.constructor = Child;
-  Child.prototype.$super = Parent.prototype;
+  var F = function(){}
+  F.prototype = Parent.prototype
+  Child.prototype = new F()
+  Child.prototype.constructor = Child
+  Child.prototype.$super = Parent.prototype
 }
+```
+
+* 判断回文字符串
+```javascript
+function palindrom(str) {
+  return str === str.split('').reverse().join('')
+}
+
+console.log(palindrom('abcdcba')) // true
 ```
